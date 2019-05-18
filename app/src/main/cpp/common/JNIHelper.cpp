@@ -7,7 +7,6 @@
 #include "JNIHelper.h"
 #include "common.h"
 
-
 int jniRegisterNativeMethods(JNIEnv* env, const char* className, const JNINativeMethod* gMethods, int numMethods) {
 
     LOGD("JNIHelper", "Start registering %s native methods.\n", className);
@@ -24,5 +23,6 @@ int jniRegisterNativeMethods(JNIEnv* env, const char* className, const JNINative
     }
 
     (env)->DeleteLocalRef(clazz);
+    LOGD("JNIHelper", "Registering %s native methods success.\n", className);
     return result;
 }

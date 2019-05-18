@@ -12,4 +12,5 @@ public class NativeDynamic {
 
     public native int nativeSetBasicArgs(int iArg, float fArg, long lArg, boolean bArg);
 
+    public native void nativeSetStringArgs(String str);
 }

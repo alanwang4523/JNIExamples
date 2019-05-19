@@ -2,12 +2,15 @@ package com.alan.jniexamples;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.alan.jniexamples.dynamic.MediaServerDynamic;
 import com.alan.jniexamples.dynamic.NativeDynamic;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +31,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void testMediaServerDynamic() {
-        MediaServerDynamic mediaServerDynamic = new MediaServerDynamic("MS_001");
-        mediaServerDynamic.config(1);
+        MediaServerDynamic mediaServerDynamic_01 = new MediaServerDynamic("MS_001");
+        mediaServerDynamic_01.config(1);
+        Log.e(TAG, "mediaServerDynamic_01 getName from native--->>" + mediaServerDynamic_01.getName());
+
+        MediaServerDynamic mediaServerDynamic_02 = new MediaServerDynamic("MS_002");
+        mediaServerDynamic_02.config(2);
+        Log.e(TAG, "mediaServerDynamic_02 getName from native--->>" + mediaServerDynamic_02.getName());
     }
 }

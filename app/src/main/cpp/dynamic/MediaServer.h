@@ -8,6 +8,8 @@
 #define JNIEXAMPLES_MEDIASERVER_H
 
 
+#include <string>
+
 class MediaServer {
 public:
     MediaServer(const char * name);
@@ -15,6 +17,10 @@ public:
 
 public:
     int config(int type);
+    std::string getName();
+
+private:
+    std::string m_name;
 };
 
 

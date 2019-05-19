@@ -11,6 +11,7 @@
 
 MediaServer::MediaServer(const char *name)
 {
+    m_name = name;
     LOGD("MediaServer", "New a MediaServer, name is %s\n", name);
 }
 
@@ -23,4 +24,9 @@ int MediaServer::config(int type)
 {
     LOGD("MediaServer", "config()-->>type = %d\n", type);
     return 0;
+}
+
+std::string MediaServer::getName()
+{
+    return m_name;
 }

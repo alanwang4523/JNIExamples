@@ -8,10 +8,6 @@
 #include "common/JNIHelper.h"
 #include "common/common.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 static int MediaServer_native_init(JNIEnv *env, jobject obj) {
     LOGD("MediaServerDynamicJNI", "MediaServer_native_init()-->>\n");
     return 0;
@@ -40,11 +36,6 @@ static JNINativeMethod gJni_Methods[] = {
         {"native_config", "(I)V", (void*)MediaServer_native_config},
 };
 
-
 int register_MediaServerDynamic(JNIEnv* env) {
     return jniRegisterNativeMethods(env, className, gJni_Methods, NELEM(gJni_Methods));
 }
-
-#ifdef __cplusplus
-}
-#endif

@@ -8,10 +8,6 @@
 #include "common/JNIHelper.h"
 #include "common/common.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 static int JNISetBasicArgs(JNIEnv *env, jobject obj,
                                           jint iArg, jfloat fArg, jlong lArg, jboolean bArg) {
     LOGD("NativeDynamicJNI", "JNISetBasicArgs()-->>iArg = %d, fArg = %f, lArg = %ld, bArg = %d\n",
@@ -39,11 +35,6 @@ static JNINativeMethod gJni_Methods[] = {
         {"nativeSetStringArgs", "(Ljava/lang/String;)V", (void*)JNISetStringArgs},
 };
 
-
 int register_NativeDynamic(JNIEnv* env) {
     return jniRegisterNativeMethods(env, className, gJni_Methods, NELEM(gJni_Methods));
 }
-
-#ifdef __cplusplus
-}
-#endif

@@ -7,11 +7,6 @@
 #include <jni.h>
 #include "common/common.h"
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 extern int register_NativeDynamic(JNIEnv* env);
 extern int register_MediaServerDynamic(JNIEnv* env);
 
@@ -36,7 +31,3 @@ jint JNI_OnLoad(JavaVM* jvm, void* reserved){
     LOGD("JNIOnLoad", "JNI_OnLoad()--->success");
     return JNI_VERSION_1_4;
 }
-
-#ifdef __cplusplus
-}
-#endif

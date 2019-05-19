@@ -7,6 +7,7 @@
 #include <jni.h>
 #include "common/JNIHelper.h"
 #include "common/common.h"
+#include "MediaServerDynamicJNI.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -48,6 +49,8 @@ jint JNI_OnLoad(JavaVM* jvm, void* reserved){
     }
 
     jniRegisterNativeMethods(env, className, gJni_Methods, NELEM(gJni_Methods));
+
+    register_MediaServerDynamic(env);
 
     return JNI_VERSION_1_4;
 }

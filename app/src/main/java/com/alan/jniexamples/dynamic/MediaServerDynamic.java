@@ -10,7 +10,7 @@ public class MediaServerDynamic {
     private static native final void native_init();
 
     static {
-        System.loadLibrary("media_jni");
+        System.loadLibrary("jni_example");
         native_init();
     }
     private long mNativeContext;

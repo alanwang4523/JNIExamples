@@ -21,8 +21,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void testDynamicJNIs() {
-        NativeDynamic nativeDynamic = new NativeDynamic();
-        nativeDynamic.nativeSetBasicArgs(2, 3.2f, 1000L, true);
-        nativeDynamic.nativeSetStringArgs("Hello Alan From Java!");
+        NativeDynamic.nativeSetBasicArgs(2, 3.2f, 1000L, true);
+        NativeDynamic.nativeSetStringArgs("Hello Alan From Java!");
     }
 }

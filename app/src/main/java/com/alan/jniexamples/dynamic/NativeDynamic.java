@@ -10,7 +10,7 @@ public class NativeDynamic {
         System.loadLibrary("jni_example");
     }
 
-    public native int nativeSetBasicArgs(int iArg, float fArg, long lArg, boolean bArg);
+    public static native int nativeSetBasicArgs(int iArg, float fArg, long lArg, boolean bArg);
 
-    public native void nativeSetStringArgs(String str);
+    public static native void nativeSetStringArgs(String str);
 }

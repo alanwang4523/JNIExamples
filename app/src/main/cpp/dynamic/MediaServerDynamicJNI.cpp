@@ -4,9 +4,6 @@
  * Mail: alanwang4523@gmail.com
  */
 
-#include "MediaServerDynamicJNI.h"
-
-
 #include <jni.h>
 #include "common/JNIHelper.h"
 #include "common/common.h"

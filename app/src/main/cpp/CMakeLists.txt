@@ -11,10 +11,12 @@ message(${MY_CPP_PATH})
 
 include_directories(${MY_CPP_PATH})
 include_directories(${MY_CPP_PATH}/dynamic/)
+include_directories(${MY_CPP_PATH}/static/)
 include_directories(${MY_CPP_PATH}/common/)
 
 file(GLOB_RECURSE CPP_FILES_IN_COMMON "${MY_CPP_PATH}/common/*.cpp")
 file(GLOB_RECURSE CPP_FILES_IN_DYNAMIC "${MY_CPP_PATH}/dynamic/*.cpp")
+file(GLOB_RECURSE CPP_FILES_IN_STATIC "${MY_CPP_PATH}/static/*.cpp")
 
 add_library(
         jni_example
@@ -22,6 +24,7 @@ add_library(
 
         ${CPP_FILES_IN_COMMON}
         ${CPP_FILES_IN_DYNAMIC}
+        ${CPP_FILES_IN_STATIC}
         )
 
 find_library(

@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.alan.jniexamples.dynamic.MediaServerDynamic;
 import com.alan.jniexamples.dynamic.NativeDynamic;
+import com.alan.jniexamples.jnistatic.NativeStatic;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
 
         testDynamicJNIs();
         testMediaServerDynamic();
+
+        testStaticJNIs();
     }
 
     private void testDynamicJNIs() {
@@ -38,5 +41,10 @@ public class MainActivity extends AppCompatActivity {
         MediaServerDynamic mediaServerDynamic_02 = new MediaServerDynamic("MS_002");
         mediaServerDynamic_02.config(2);
         Log.e(TAG, "mediaServerDynamic_02 getName from native--->>" + mediaServerDynamic_02.getName());
+    }
+
+    private void testStaticJNIs() {
+        NativeStatic.nativeSetBasicArgs(3, 2.2f, 60000L, false);
+        NativeStatic.nativeSetStringArgs("String From Java Static Test!");
     }
 }

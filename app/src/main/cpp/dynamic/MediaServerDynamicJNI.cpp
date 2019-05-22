@@ -52,7 +52,7 @@ static int MediaServer_native_config(JNIEnv *env, jobject obj, jint type) {
 static jstring MediaServer_native_getName(JNIEnv *env, jobject obj) {
     MediaServer * mediaServer = (MediaServer *)env->GetLongField(obj, gFields.context);
     const char *c_name = mediaServer->getName().c_str();
-    return env->NewStringUTF(c_name);;
+    return env->NewStringUTF(c_name);
 }
 
 static JNINativeMethod gJni_Methods[] = {

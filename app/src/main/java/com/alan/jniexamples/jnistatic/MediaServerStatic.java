@@ -6,13 +6,11 @@ package com.alan.jniexamples.jnistatic;
  * Mail: alanwang4523@gmail.com
  */
 public class MediaServerStatic {
-
-    // javah -classpath app/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes com.alan.jniexamples.jnistatic.MediaServerStatic
-
-    /**
+    /*
      * 生成 JNI  头文件命令，在项目根目录执行，即 JNIExamples 目录下执行（先 rebuild 一下生成 class 文件）：
      * javah -classpath app/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes com.alan.jniexamples.jnistatic.MediaServerStatic
      */
+
     static {
         System.loadLibrary("jni_example");
     }

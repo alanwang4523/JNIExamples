@@ -7,7 +7,7 @@
 #include <jni.h>
 #include "common/JNIHelper.h"
 #include "common/common.h"
-#include "MediaServer.h"
+#include "business/MediaServer.h"
 
 struct fields_t {
     jfieldID context;

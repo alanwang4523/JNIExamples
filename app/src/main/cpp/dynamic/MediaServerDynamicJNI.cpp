@@ -46,13 +46,30 @@ static void MediaServer_native_create(JNIEnv *env, jobject obj,jstring strArg) {
 static int MediaServer_native_config(JNIEnv *env, jobject obj, jint type) {
     // 通过上层实例的成员变量获取对应的底层实例
     MediaServer * mediaServer = (MediaServer *)env->GetLongField(obj, gFields.context);
-    return mediaServer->config(type);
+    if (mediaServer) {
+        return mediaServer->config(type);
+    } else {
+        return -1;
+    }
 }
 
 static jstring MediaServer_native_getName(JNIEnv *env, jobject obj) {
     MediaServer * mediaServer = (MediaServer *)env->GetLongField(obj, gFields.context);
-    const char *c_name = mediaServer->getName().c_str();
-    return env->NewStringUTF(c_name);
+    if (mediaServer) {
+        const char *c_name = mediaServer->getName().c_str();
+        return env->NewStringUTF(c_name);
+    } else {
+        return nullptr;
+    }
+}
+
+static void MediaServer_native_release(JNIEnv *env, jobject obj, jint type) {
+    // 通过上层实例的成员变量获取对应的底层实例
+    MediaServer * mediaServer = (MediaServer *)env->GetLongField(obj, gFields.context);
+    if (mediaServer) {
+        delete mediaServer;
+    }
+    env->SetLongField(obj, gFields.context, (jlong)0);
 }
 
 static JNINativeMethod gJni_Methods[] = {
@@ -60,6 +77,7 @@ static JNINativeMethod gJni_Methods[] = {
         {"native_create", "(Ljava/lang/String;)V", (void*)MediaServer_native_create},
         {"native_config", "(I)V", (void*)MediaServer_native_config},
         {"native_getName", "()Ljava/lang/String;", (void*)MediaServer_native_getName},
+        {"native_release", "()V", (void*)MediaServer_native_release},
 };
 
 int register_MediaServerDynamic(JNIEnv* env) {

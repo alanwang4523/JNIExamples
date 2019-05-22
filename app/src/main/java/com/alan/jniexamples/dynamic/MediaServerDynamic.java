@@ -28,10 +28,18 @@ public class MediaServerDynamic {
         return native_getName();
     }
 
+    public void release() {
+        native_release();
+    }
+
+    /////////////////////////// Native functions ///////////////////////////
+
     private native final void native_create(String name);
 
     private native final void native_config(int type);
 
     private native final String native_getName();
+
+    private native final void native_release();
 
 }

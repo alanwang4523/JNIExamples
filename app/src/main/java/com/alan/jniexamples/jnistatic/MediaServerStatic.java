@@ -33,6 +33,8 @@ public class MediaServerStatic {
         nativeRelease(mNativeContext);
     }
 
+    /////////////////////////// Native functions ///////////////////////////
+
     private native final long nativeCreate(String name);
 
     private native final void nativeConfig(long instanceId, int type);

@@ -31,36 +31,40 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void testDynamicJNIs() {
+        Log.e(TAG, "/////////////////// testDynamicJNIs ///////////////////");
         NativeDynamic.nativeSetBasicArgs(2, 3.2f, 1000L, true);
         NativeDynamic.nativeSetStringArgs("Hello Alan From Java!");
     }
 
     private void testMediaServerDynamic() {
+        Log.e(TAG, "/////////////////// testMediaServerDynamic ///////////////////");
         MediaServerDynamic mediaServerDynamic_01 = new MediaServerDynamic("MSD_001");
         mediaServerDynamic_01.config(1);
-        Log.e(TAG, "mediaServerDynamic_01 getName from native--->>" + mediaServerDynamic_01.getName());
+        Log.d(TAG, "mediaServerDynamic_01 getName from native--->>" + mediaServerDynamic_01.getName());
+        mediaServerDynamic_01.release();
 
         MediaServerDynamic mediaServerDynamic_02 = new MediaServerDynamic("MSD_002");
         mediaServerDynamic_02.config(2);
-        Log.e(TAG, "mediaServerDynamic_02 getName from native--->>" + mediaServerDynamic_02.getName());
+        Log.d(TAG, "mediaServerDynamic_02 getName from native--->>" + mediaServerDynamic_02.getName());
+        mediaServerDynamic_02.release();
     }
 
     private void testStaticJNIs() {
+        Log.e(TAG, "/////////////////// testStaticJNIs ///////////////////");
         NativeStatic.nativeSetBasicArgs(3, 2.2f, 60000L, false);
         NativeStatic.nativeSetStringArgs("String From Java Static Test!");
     }
 
     private void testMediaServerStatic() {
+        Log.e(TAG, "/////////////////// testMediaServerStatic ///////////////////");
         MediaServerStatic mediaServerStatic_01 = new MediaServerStatic("MSS_001");
         mediaServerStatic_01.config(3);
-        Log.e(TAG, "mediaServerStatic_01 getName from native--->>" + mediaServerStatic_01.getName());
+        Log.d(TAG, "mediaServerStatic_01 getName from native--->>" + mediaServerStatic_01.getName());
         mediaServerStatic_01.release();
 
         MediaServerStatic mediaServerStatic_02 = new MediaServerStatic("MSS_002");
         mediaServerStatic_02.config(5);
-        Log.e(TAG, "mediaServerStatic_02 getName from native--->>" + mediaServerStatic_02.getName());
+        Log.d(TAG, "mediaServerStatic_02 getName from native--->>" + mediaServerStatic_02.getName());
         mediaServerStatic_02.release();
-
-
     }
 }

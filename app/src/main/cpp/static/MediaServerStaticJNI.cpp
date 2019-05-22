@@ -12,10 +12,10 @@ extern "C" {
 #endif
 /*
  * Class:     com_alan_jniexamples_jnistatic_MediaServerStatic
- * Method:    native_create
+ * Method:    nativeCreate
  * Signature: (Ljava/lang/String;)J
  */
-JNIEXPORT jlong JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_native_1create
+JNIEXPORT jlong JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_nativeCreate
         (JNIEnv *env, jobject obj, jstring jsName) {
     jboolean isCopy;
     // 这里不能直接使用 jsName，需要将其通过 GetStringUTFChars 接口将其转成 UTF-8 的 字符串的指针
@@ -34,10 +34,10 @@ JNIEXPORT jlong JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_na
 
 /*
  * Class:     com_alan_jniexamples_jnistatic_MediaServerStatic
- * Method:    native_config
+ * Method:    nativeConfig
  * Signature: (JI)V
  */
-JNIEXPORT void JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_native_1config
+JNIEXPORT void JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_nativeConfig
 (JNIEnv *env, jobject obj, jlong instanceId, jint type) {
     MediaServer * mediaServer = (MediaServer *)instanceId;
     if (mediaServer) {
@@ -47,24 +47,25 @@ JNIEXPORT void JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_nat
 
 /*
  * Class:     com_alan_jniexamples_jnistatic_MediaServerStatic
- * Method:    native_getName
+ * Method:    nativeGetName
  * Signature: (J)Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_native_1getName
+JNIEXPORT jstring JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_nativeGetName
         (JNIEnv *env, jobject obj, jlong instanceId) {
     MediaServer * mediaServer = (MediaServer *)instanceId;
     if (mediaServer) {
         const char *c_name = mediaServer->getName().c_str();
         return env->NewStringUTF(c_name);
     }
+    return env->NewStringUTF("");
 }
 
 /*
  * Class:     com_alan_jniexamples_jnistatic_MediaServerStatic
- * Method:    native_release
+ * Method:    nativeRelease
  * Signature: (J)V
  */
-JNIEXPORT void JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_native_1release
+JNIEXPORT void JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_nativeRelease
 (JNIEnv *env, jobject obj, jlong instanceId) {
     MediaServer * mediaServer = (MediaServer *)instanceId;
     if (mediaServer) {
@@ -74,3 +75,4 @@ JNIEXPORT void JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_nat
 
 #ifdef __cplusplus
 }
+#endif

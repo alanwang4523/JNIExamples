@@ -18,26 +18,26 @@ public class MediaServerStatic {
     private long mNativeContext;
 
     public MediaServerStatic(String name) {
-        mNativeContext = native_create(name);
+        mNativeContext = nativeCreate(name);
     }
 
     public void config(int type) {
-        native_config(mNativeContext, type);
+        nativeConfig(mNativeContext, type);
     }
 
     public String getName() {
-        return native_getName(mNativeContext);
+        return nativeGetName(mNativeContext);
     }
 
     public void release() {
-        native_release(mNativeContext);
+        nativeRelease(mNativeContext);
     }
 
-    private native final long native_create(String name);
+    private native final long nativeCreate(String name);
 
-    private native final void native_config(long instanceId, int type);
+    private native final void nativeConfig(long instanceId, int type);
 
-    private native final String native_getName(long instanceId);
+    private native final String nativeGetName(long instanceId);
 
-    private native final void native_release(long instanceId);
+    private native final void nativeRelease(long instanceId);
 }

@@ -9,35 +9,35 @@ extern "C" {
 #endif
 /*
  * Class:     com_alan_jniexamples_jnistatic_MediaServerStatic
- * Method:    native_create
+ * Method:    nativeCreate
  * Signature: (Ljava/lang/String;)J
  */
-JNIEXPORT jlong JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_native_1create
-  (JNIEnv *, jobject, jstring);
+JNIEXPORT jlong JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_nativeCreate
+        (JNIEnv *, jobject, jstring);
 
 /*
  * Class:     com_alan_jniexamples_jnistatic_MediaServerStatic
- * Method:    native_config
+ * Method:    nativeConfig
  * Signature: (JI)V
  */
-JNIEXPORT void JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_native_1config
-  (JNIEnv *, jobject, jlong, jint);
+JNIEXPORT void JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_nativeConfig
+        (JNIEnv *, jobject, jlong, jint);
 
 /*
  * Class:     com_alan_jniexamples_jnistatic_MediaServerStatic
- * Method:    native_getName
+ * Method:    nativeGetName
  * Signature: (J)Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_native_1getName
-  (JNIEnv *, jobject, jlong);
+JNIEXPORT jstring JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_nativeGetName
+        (JNIEnv *, jobject, jlong);
 
 /*
  * Class:     com_alan_jniexamples_jnistatic_MediaServerStatic
- * Method:    native_release
+ * Method:    nativeRelease
  * Signature: (J)V
  */
-JNIEXPORT void JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_native_1release
-  (JNIEnv *, jobject, jlong);
+JNIEXPORT void JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_nativeRelease
+        (JNIEnv *, jobject, jlong);
 
 #ifdef __cplusplus
 }

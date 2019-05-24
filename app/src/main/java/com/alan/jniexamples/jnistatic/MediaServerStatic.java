@@ -1,5 +1,7 @@
 package com.alan.jniexamples.jnistatic;
 
+import android.util.Log;
+
 import com.alan.jniexamples.common.MediaParam;
 
 /**
@@ -28,7 +30,10 @@ public class MediaServerStatic {
     }
 
     public void setMediaParam(MediaParam mediaParam) {
-
+        int errCode = nativeSetMediaParam(mNativeContext, mediaParam);
+        if (errCode != 0) {
+            Log.e("MediaServerStatic", "setMediaParam error : " + errCode);
+        }
     }
 
     public String getName() {

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.alan.jniexamples.common.MediaParam;
 import com.alan.jniexamples.dynamic.MediaServerDynamic;
 import com.alan.jniexamples.dynamic.NativeDynamic;
 import com.alan.jniexamples.jnistatic.MediaServerStatic;
@@ -59,6 +60,14 @@ public class MainActivity extends AppCompatActivity {
         Log.e(TAG, "/////////////////// testMediaServerStatic ///////////////////");
         MediaServerStatic mediaServerStatic_01 = new MediaServerStatic("MSS_001");
         mediaServerStatic_01.config(3);
+
+        MediaParam mediaParam = MediaParam.build()
+                .setPath("/sdcard/Alan/audio/test.m4a")
+                .setStartTime(0L)
+                .setEndTime(15 * 1000L)
+                .setEnableLoop(true);
+        mediaServerStatic_01.setMediaParam(mediaParam);
+
         Log.d(TAG, "mediaServerStatic_01 getName from native--->>" + mediaServerStatic_01.getName());
         mediaServerStatic_01.release();
 

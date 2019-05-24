@@ -4,7 +4,7 @@
  * Mail: alanwang4523@gmail.com
  */
 
-#include "common/common.h"
+#include "common/Log.h"
 #include "NativeStaticJNI.h"
 
 #ifdef __cplusplus

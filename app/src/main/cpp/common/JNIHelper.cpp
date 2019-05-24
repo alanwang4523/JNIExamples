@@ -5,7 +5,7 @@
  */
 
 #include "JNIHelper.h"
-#include "common.h"
+#include "Log.h"
 
 int jniRegisterNativeMethods(JNIEnv* env, const char* className, const JNINativeMethod* gMethods, int numMethods) {
 

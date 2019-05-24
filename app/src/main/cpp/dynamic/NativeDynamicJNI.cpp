@@ -6,7 +6,7 @@
 
 #include <jni.h>
 #include "common/JNIHelper.h"
-#include "common/common.h"
+#include "common/Log.h"
 
 static int JNISetBasicArgs(JNIEnv *env, jobject obj,
                                           jint iArg, jfloat fArg, jlong lArg, jboolean bArg) {

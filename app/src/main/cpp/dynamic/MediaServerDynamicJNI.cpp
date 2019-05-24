@@ -6,7 +6,7 @@
 
 #include <jni.h>
 #include "common/JNIHelper.h"
-#include "common/common.h"
+#include "common/Log.h"
 #include "business/MediaServer.h"
 
 struct fields_t {

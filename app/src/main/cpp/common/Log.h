@@ -4,8 +4,8 @@
  * Mail: alanwang4523@gmail.com
  */
 
-#ifndef JNIEXAMPLES_COMMON_H
-#define JNIEXAMPLES_COMMON_H
+#ifndef JNIEXAMPLES_LOG_H
+#define JNIEXAMPLES_LOG_H
 
 #ifdef __ANDROID__
 #include <android/log.h>
@@ -14,5 +14,4 @@
 #define LOGE(TAG, ...) __android_log_print(ANDROID_LOG_ERROR  , TAG, __VA_ARGS__)
 #endif
 
-
-#endif //JNIEXAMPLES_COMMON_H
+#endif //JNIEXAMPLES_LOG_H

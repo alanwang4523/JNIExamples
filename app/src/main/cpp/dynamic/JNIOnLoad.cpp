@@ -5,7 +5,7 @@
  */
 
 #include <jni.h>
-#include "common/common.h"
+#include "common/Log.h"
 
 extern int register_NativeDynamic(JNIEnv* env);
 extern int register_MediaServerDynamic(JNIEnv* env);

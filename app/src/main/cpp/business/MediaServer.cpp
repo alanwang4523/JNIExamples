@@ -7,7 +7,7 @@
  */
 
 #include "MediaServer.h"
-#include "common/common.h"
+#include "common/Log.h"
 
 MediaServer::MediaServer(const char *name)
 {

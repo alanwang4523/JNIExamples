@@ -9,24 +9,26 @@
 #include "MediaServer.h"
 #include "common/Log.h"
 
-MediaServer::MediaServer(const char *name)
-{
+MediaServer::MediaServer(const char *name) {
     m_name = name;
     LOGD("MediaServer", "New a MediaServer, name is %s\n", name);
 }
 
-MediaServer::~MediaServer()
-{
+MediaServer::~MediaServer() {
     LOGD("MediaServer", "Delete the MediaServer\n");
 }
 
-int MediaServer::config(int type)
-{
-    LOGD("MediaServer", "config()-->>type = %d\n", type);
-    return 0;
+int MediaServer::config(int type) {
+    LOGD("MediaServer", "config()-->>instance = %p, type = %d\n", this, type);
+    return SUCCESS;
 }
 
-std::string MediaServer::getName()
-{
+int MediaServer::setMediaParam(pMediaParam mediaParam) {
+    LOGD("MediaServer", "setMediaParam()-->>instance = %p, path = %s, start_time = %ld, end_time = %ld, enable_loop = %d\n",
+            this, mediaParam->path, mediaParam->start_time, mediaParam->end_time, mediaParam->enable_loop);
+    return SUCCESS;
+}
+
+std::string MediaServer::getName() {
     return m_name;
 }

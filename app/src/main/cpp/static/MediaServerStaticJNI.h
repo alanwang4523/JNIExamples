@@ -26,9 +26,9 @@ JNIEXPORT void JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_nat
 /*
  * Class:     com_alan_jniexamples_jnistatic_MediaServerStatic
  * Method:    nativeSetMediaParam
- * Signature: (JLcom/alan/jniexamples/common/MediaParam;)V
+ * Signature: (JLcom/alan/jniexamples/common/MediaParam;)I
  */
-JNIEXPORT void JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_nativeSetMediaParam
+JNIEXPORT jint JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_nativeSetMediaParam
         (JNIEnv *, jobject, jlong, jobject);
 
 /*

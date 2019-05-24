@@ -7,8 +7,8 @@
 #ifndef JNIEXAMPLES_MEDIASERVER_H
 #define JNIEXAMPLES_MEDIASERVER_H
 
-
 #include <string>
+#include "Common.h"
 
 class MediaServer {
 public:
@@ -17,6 +17,7 @@ public:
 
 public:
     int config(int type);
+    int setMediaParam(pMediaParam mediaParam);
     std::string getName();
 
 private:

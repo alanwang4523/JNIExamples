@@ -8,6 +8,12 @@
 #ifndef JNIEXAMPLES_COMMON_H
 #define JNIEXAMPLES_COMMON_H
 
+
+enum {
+    SUCCESS = 0,
+    ERROR_PARAM = -1001,
+};
+
 typedef struct _MediaParam {
     const char * path;
     long start_time;

@@ -9,9 +9,10 @@ import android.support.annotation.Keep;
  */
 @Keep
 public class MediaParam {
+
     private String path;
-    private long startTimeMs;
-    private long endTimeMs;
+    private long startTime;
+    private long endTime;
     private boolean enableLoop;
 
     public static MediaParam build() {
@@ -32,22 +33,22 @@ public class MediaParam {
     }
 
     @Keep
-    public long getStartTimeMs() {
-        return startTimeMs;
+    public long getStartTime() {
+        return startTime;
     }
 
-    public MediaParam setStartTimeMs(long startTimeMs) {
-        this.startTimeMs = startTimeMs;
+    public MediaParam setStartTime(long startTime) {
+        this.startTime = startTime;
         return this;
     }
 
     @Keep
-    public long getEndTimeMs() {
-        return endTimeMs;
+    public long getEndTime() {
+        return endTime;
     }
 
-    public MediaParam setEndTimeMs(long endTimeMs) {
-        this.endTimeMs = endTimeMs;
+    public MediaParam setEndTime(long endTime) {
+        this.endTime = endTime;
         return this;
     }
 
@@ -65,8 +66,8 @@ public class MediaParam {
     public String toString() {
         return "MediaParam{" +
                 "path='" + path + '\'' +
-                ", startTimeMs=" + startTimeMs +
-                ", endTimeMs=" + endTimeMs +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
                 ", enableLoop=" + enableLoop +
                 '}';
     }

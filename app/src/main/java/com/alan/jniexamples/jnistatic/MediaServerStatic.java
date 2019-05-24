@@ -45,7 +45,7 @@ public class MediaServerStatic {
 
     private native final void nativeConfig(long instanceId, int type);
 
-    private native final void nativeSetMediaParam(long instanceId, MediaParam mediaParam);
+    private native final int nativeSetMediaParam(long instanceId, MediaParam mediaParam);
 
     private native final String nativeGetName(long instanceId);
 

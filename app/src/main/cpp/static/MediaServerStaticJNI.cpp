@@ -48,15 +48,81 @@ JNIEXPORT void JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_nat
 /*
  * Class:     com_alan_jniexamples_jnistatic_MediaServerStatic
  * Method:    nativeSetMediaParam
- * Signature: (JLcom/alan/jniexamples/common/MediaParam;)V
+ * Signature: (JLcom/alan/jniexamples/common/MediaParam;)I
  */
-JNIEXPORT void JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_nativeSetMediaParam
-        (JNIEnv *env, jobject jobj, jlong instanceId, jobject jParam) {
+JNIEXPORT jint JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_nativeSetMediaParam
+        (JNIEnv *env, jobject jobj, jlong instanceId, jobject jniParamObj) {
 
     MediaServer * mediaServer = (MediaServer *)instanceId;
-    if (mediaServer) {
-
+    if (!mediaServer) {
+        return ERROR_PARAM;
     }
+
+    int errCode = SUCCESS;
+
+    jclass jclsParamClass = NULL;
+    jmethodID jmid = NULL;
+    jstring jsFilePath = NULL;
+
+    MediaParam mediaParam;
+    mediaParam.path = NULL;
+
+    if ((NULL == env) || (jniParamObj == NULL)) {
+        errCode = ERROR_PARAM;
+        goto exit;
+    }
+
+    jclsParamClass = env->GetObjectClass(jniParamObj);
+    if (NULL == jclsParamClass) {
+        errCode = ERROR_PARAM;
+        goto exit;
+    }
+
+    //获取文件路径
+    jmid = env->GetMethodID(jclsParamClass, "getPath", "()Ljava/lang/String;");
+    if (NULL == jmid) {
+        errCode = ERROR_PARAM;
+        goto exit;
+    }
+    jsFilePath = (jstring) env->CallObjectMethod(jniParamObj, jmid);
+    if (NULL != jsFilePath) {
+        mediaParam.path = env->GetStringUTFChars(jsFilePath, NULL);
+    }
+
+    jmid = env->GetMethodID(jclsParamClass, "getStartTime", "()J");
+    if (NULL == jmid) {
+        errCode = ERROR_PARAM;
+        goto exit;
+    }
+    mediaParam.start_time = env->CallLongMethod(jniParamObj, jmid);
+
+    jmid = env->GetMethodID(jclsParamClass, "getEndTime", "()J");
+    if (NULL == jmid) {
+        errCode = ERROR_PARAM;
+        goto exit;
+    }
+    mediaParam.end_time = env->CallLongMethod(jniParamObj, jmid);
+
+    jmid = env->GetMethodID(jclsParamClass, "isEnableLoop", "()Z");
+    if (NULL == jmid) {
+        errCode = ERROR_PARAM;
+        goto exit;
+    }
+    mediaParam.enable_loop = env->CallBooleanMethod(jniParamObj, jmid);
+
+    errCode = mediaServer->setMediaParam(&mediaParam);
+exit:
+    if (jclsParamClass) {
+        env->DeleteLocalRef(jclsParamClass);
+    }
+    //释放文件路径相关的内存
+    if (mediaParam.path) {
+        env->ReleaseStringUTFChars(jsFilePath, mediaParam.path);
+    }
+    if (jsFilePath) {
+        env->DeleteLocalRef(jsFilePath);
+    }
+    return errCode;
 }
 
 /*

@@ -1,5 +1,7 @@
 package com.alan.jniexamples.jnistatic;
 
+import com.alan.jniexamples.common.MediaParam;
+
 /**
  * Author: AlanWang4523.
  * Date: 19/5/22 23:13.
@@ -25,6 +27,10 @@ public class MediaServerStatic {
         nativeConfig(mNativeContext, type);
     }
 
+    public void setMediaParam(MediaParam mediaParam) {
+
+    }
+
     public String getName() {
         return nativeGetName(mNativeContext);
     }
@@ -38,6 +44,8 @@ public class MediaServerStatic {
     private native final long nativeCreate(String name);
 
     private native final void nativeConfig(long instanceId, int type);
+
+    private native final void nativeSetMediaParam(long instanceId, MediaParam mediaParam);
 
     private native final String nativeGetName(long instanceId);
 

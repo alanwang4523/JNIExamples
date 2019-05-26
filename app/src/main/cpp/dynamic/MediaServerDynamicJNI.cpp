@@ -49,8 +49,83 @@ static int MediaServer_native_config(JNIEnv *env, jobject obj, jint type) {
     if (mediaServer) {
         return mediaServer->config(type);
     } else {
-        return -1;
+        return ERROR_PARAM;
     }
+}
+
+static int MediaServer_native_setMediaParam(JNIEnv *env, jobject obj, jobject jniParamObj) {
+    // 通过上层实例的成员变量获取对应的底层实例
+    MediaServer * mediaServer = (MediaServer *)env->GetLongField(obj, gFields.context);
+    if (!mediaServer) {
+        return ERROR_PARAM;
+    }
+
+    int errCode = SUCCESS;
+
+    jclass jclsParamClass = NULL;
+    jmethodID jmid = NULL;
+    jstring jsFilePath = NULL;
+
+    MediaParam mediaParam;
+    mediaParam.path = NULL;
+
+    if ((NULL == env) || (jniParamObj == NULL)) {
+        errCode = ERROR_PARAM;
+        goto exit;
+    }
+
+    jclsParamClass = env->GetObjectClass(jniParamObj);
+    if (NULL == jclsParamClass) {
+        errCode = ERROR_PARAM;
+        goto exit;
+    }
+
+    //获取文件路径
+    jmid = env->GetMethodID(jclsParamClass, "getPath", "()Ljava/lang/String;");
+    if (NULL == jmid) {
+        errCode = ERROR_PARAM;
+        goto exit;
+    }
+    jsFilePath = (jstring) env->CallObjectMethod(jniParamObj, jmid);
+    if (NULL != jsFilePath) {
+        mediaParam.path = env->GetStringUTFChars(jsFilePath, NULL);
+    }
+
+    jmid = env->GetMethodID(jclsParamClass, "getStartTime", "()J");
+    if (NULL == jmid) {
+        errCode = ERROR_PARAM;
+        goto exit;
+    }
+    mediaParam.start_time = env->CallLongMethod(jniParamObj, jmid);
+
+    jmid = env->GetMethodID(jclsParamClass, "getEndTime", "()J");
+    if (NULL == jmid) {
+        errCode = ERROR_PARAM;
+        goto exit;
+    }
+    mediaParam.end_time = env->CallLongMethod(jniParamObj, jmid);
+
+    jmid = env->GetMethodID(jclsParamClass, "isEnableLoop", "()Z");
+    if (NULL == jmid) {
+        errCode = ERROR_PARAM;
+        goto exit;
+    }
+    mediaParam.enable_loop = env->CallBooleanMethod(jniParamObj, jmid);
+
+    errCode = mediaServer->setMediaParam(&mediaParam);
+
+exit:
+    if (jclsParamClass) {
+        env->DeleteLocalRef(jclsParamClass);
+    }
+    //释放文件路径相关的内存
+    if (mediaParam.path) {
+        env->ReleaseStringUTFChars(jsFilePath, mediaParam.path);
+    }
+    if (jsFilePath) {
+        env->DeleteLocalRef(jsFilePath);
+    }
+    return errCode;
 }
 
 static jstring MediaServer_native_getName(JNIEnv *env, jobject obj) {
@@ -76,6 +151,7 @@ static JNINativeMethod gJni_Methods[] = {
         {"native_init", "()V", (void*)MediaServer_native_init},
         {"native_create", "(Ljava/lang/String;)V", (void*)MediaServer_native_create},
         {"native_config", "(I)V", (void*)MediaServer_native_config},
+        {"native_setMediaParam", "(Lcom/alan/jniexamples/common/MediaParam;)I", (void*)MediaServer_native_setMediaParam},
         {"native_getName", "()Ljava/lang/String;", (void*)MediaServer_native_getName},
         {"native_release", "()V", (void*)MediaServer_native_release},
 };

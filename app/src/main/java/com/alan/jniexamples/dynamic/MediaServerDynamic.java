@@ -1,5 +1,9 @@
 package com.alan.jniexamples.dynamic;
 
+import android.util.Log;
+
+import com.alan.jniexamples.common.MediaParam;
+
 /**
  * Author: AlanWang4523.
  * Date: 19/5/19 22:13.
@@ -24,6 +28,13 @@ public class MediaServerDynamic {
         native_config(type);
     }
 
+    public void setMediaParam(MediaParam mediaParam) {
+        int errCode = native_setMediaParam(mediaParam);
+        if (errCode != 0) {
+            Log.e("MediaServerDynamic", "setMediaParam error : " + errCode);
+        }
+    }
+
     public String getName() {
         return native_getName();
     }
@@ -37,6 +48,8 @@ public class MediaServerDynamic {
     private native final void native_create(String name);
 
     private native final void native_config(int type);
+
+    private native final int native_setMediaParam(MediaParam mediaParam);
 
     private native final String native_getName();
 

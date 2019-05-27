@@ -51,6 +51,11 @@ public class MainActivity extends AppCompatActivity {
         mediaServerDynamic_01.setMediaParam(mediaParam);
 
         Log.d(TAG, "mediaServerDynamic_01 getName from native--->>" + mediaServerDynamic_01.getName());
+
+        // 从底层创建 Java 实例并返回给 Java 层
+        MediaInfo mediaInfo = mediaServerDynamic_01.getMediaInfo();
+        Log.d(TAG, "mediaServerDynamic_01 getMediaInfo from native--->>" + mediaInfo);
+
         mediaServerDynamic_01.release();
 
         MediaServerDynamic mediaServerDynamic_02 = new MediaServerDynamic("MSD_002");
@@ -79,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(TAG, "mediaServerStatic_01 getName from native--->>" + mediaServerStatic_01.getName());
 
+        // 从底层创建 Java 实例并返回给 Java 层
         MediaInfo mediaInfo = mediaServerStatic_01.getMediaInfo();
         Log.d(TAG, "mediaServerStatic_01 getMediaInfo from native--->>" + mediaInfo);
         mediaServerStatic_01.release();

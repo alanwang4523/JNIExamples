@@ -152,16 +152,21 @@ JNIEXPORT jobject JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_
         return nullptr;
     }
 
+    // 找到要创建的 Java 类
     jclass jclMediaInfo = env->FindClass("com/alan/jniexamples/common/MediaInfo");
+    // 获取 Java 类的构造函数及相关方法
     jmethodID jmidConstructor = env->GetMethodID(jclMediaInfo, "<init>", "()V");
     jmethodID jmidSetSampleRate = env->GetMethodID(jclMediaInfo, "setSampleRate", "(I)V");
     jmethodID jmidSetChanelCount = env->GetMethodID(jclMediaInfo, "setChanelCount", "(I)V");
     jmethodID jmidSetDuration = env->GetMethodID(jclMediaInfo, "setDuration", "(J)V");
 
+    // 通过构造函数创建 Java 实例
     jobject jobjMediaInfo = env->NewObject(jclMediaInfo, jmidConstructor);
 
+    // 从 C/C++ 的业务实例获取 Java 层要获取的信息
     pMediaInfo mediaInfo = mediaServer->getMediaInfo();
 
+    // 通过相应的方法给创建的 Java 实例赋值
     env->CallVoidMethod(jobjMediaInfo, jmidSetSampleRate, mediaInfo->sample_rate);
     env->CallVoidMethod(jobjMediaInfo, jmidSetChanelCount, mediaInfo->chanel_count);
     env->CallVoidMethod(jobjMediaInfo, jmidSetDuration, mediaInfo->duration);

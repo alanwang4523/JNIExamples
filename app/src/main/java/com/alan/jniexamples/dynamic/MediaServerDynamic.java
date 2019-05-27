@@ -2,6 +2,7 @@ package com.alan.jniexamples.dynamic;
 
 import android.util.Log;
 
+import com.alan.jniexamples.common.MediaInfo;
 import com.alan.jniexamples.common.MediaParam;
 
 /**
@@ -39,6 +40,10 @@ public class MediaServerDynamic {
         return native_getName();
     }
 
+    public MediaInfo getMediaInfo() {
+        return native_getMediaInfo();
+    }
+
     public void release() {
         native_release();
     }
@@ -52,6 +57,8 @@ public class MediaServerDynamic {
     private native final int native_setMediaParam(MediaParam mediaParam);
 
     private native final String native_getName();
+
+    private native final MediaInfo native_getMediaInfo();
 
     private native final void native_release();
 

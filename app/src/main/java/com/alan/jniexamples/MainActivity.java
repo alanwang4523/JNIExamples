@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.alan.jniexamples.common.MediaInfo;
 import com.alan.jniexamples.common.MediaParam;
 import com.alan.jniexamples.dynamic.MediaServerDynamic;
 import com.alan.jniexamples.dynamic.NativeDynamic;
@@ -77,6 +78,9 @@ public class MainActivity extends AppCompatActivity {
         mediaServerStatic_01.setMediaParam(mediaParam);
 
         Log.d(TAG, "mediaServerStatic_01 getName from native--->>" + mediaServerStatic_01.getName());
+
+        MediaInfo mediaInfo = mediaServerStatic_01.getMediaInfo();
+        Log.d(TAG, "mediaServerStatic_01 getMediaInfo from native--->>" + mediaInfo);
         mediaServerStatic_01.release();
 
         MediaServerStatic mediaServerStatic_02 = new MediaServerStatic("MSS_002");

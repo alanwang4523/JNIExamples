@@ -152,6 +152,21 @@ JNIEXPORT jobject JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_
         return nullptr;
     }
 
+    jclass jclMediaInfo = env->FindClass("com/alan/jniexamples/common/MediaInfo");
+    jmethodID jmidConstructor = env->GetMethodID(jclMediaInfo, "<init>", "()V");
+    jmethodID jmidSetSampleRate = env->GetMethodID(jclMediaInfo, "setSampleRate", "(I)V");
+    jmethodID jmidSetChanelCount = env->GetMethodID(jclMediaInfo, "setChanelCount", "(I)V");
+    jmethodID jmidSetDuration = env->GetMethodID(jclMediaInfo, "setDuration", "(J)V");
+
+    jobject jobjMediaInfo = env->NewObject(jclMediaInfo, jmidConstructor);
+
+    pMediaInfo mediaInfo = mediaServer->getMediaInfo();
+
+    env->CallVoidMethod(jobjMediaInfo, jmidSetSampleRate, mediaInfo->sample_rate);
+    env->CallVoidMethod(jobjMediaInfo, jmidSetChanelCount, mediaInfo->chanel_count);
+    env->CallVoidMethod(jobjMediaInfo, jmidSetDuration, mediaInfo->duration);
+
+    return jobjMediaInfo;
 }
 
 /*

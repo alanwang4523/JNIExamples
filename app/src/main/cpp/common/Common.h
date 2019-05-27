@@ -21,4 +21,10 @@ typedef struct _MediaParam {
     bool enable_loop;
 } MediaParam, *pMediaParam;
 
+typedef struct _MediaInfo {
+    int sample_rate;
+    int chanel_count;
+    long duration;
+} MediaInfo, *pMediaInfo;
+
 #endif //JNIEXAMPLES_COMMON_H

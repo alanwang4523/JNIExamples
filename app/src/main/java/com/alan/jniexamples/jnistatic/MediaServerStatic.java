@@ -2,6 +2,7 @@ package com.alan.jniexamples.jnistatic;
 
 import android.util.Log;
 
+import com.alan.jniexamples.common.MediaInfo;
 import com.alan.jniexamples.common.MediaParam;
 
 /**
@@ -40,6 +41,10 @@ public class MediaServerStatic {
         return nativeGetName(mNativeContext);
     }
 
+    public MediaInfo getMediaInfo() {
+        return nativeGetMediaInfo(mNativeContext);
+    }
+
     public void release() {
         nativeRelease(mNativeContext);
     }
@@ -53,6 +58,8 @@ public class MediaServerStatic {
     private native final int nativeSetMediaParam(long instanceId, MediaParam mediaParam);
 
     private native final String nativeGetName(long instanceId);
+
+    private native final MediaInfo nativeGetMediaInfo(long instanceId);
 
     private native final void nativeRelease(long instanceId);
 }

@@ -41,6 +41,14 @@ public class MainActivity extends AppCompatActivity {
         Log.e(TAG, "/////////////////// testMediaServerDynamic ///////////////////");
         MediaServerDynamic mediaServerDynamic_01 = new MediaServerDynamic("MSD_001");
         mediaServerDynamic_01.config(1);
+
+        MediaParam mediaParam = MediaParam.build()
+                .setPath("/sdcard/Alan/audio/dynamic.m4a")
+                .setStartTime(10 * 1000L)
+                .setEndTime(30 * 1000L)
+                .setEnableLoop(true);
+        mediaServerDynamic_01.setMediaParam(mediaParam);
+
         Log.d(TAG, "mediaServerDynamic_01 getName from native--->>" + mediaServerDynamic_01.getName());
         mediaServerDynamic_01.release();
 

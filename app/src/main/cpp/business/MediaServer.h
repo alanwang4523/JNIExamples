@@ -19,9 +19,11 @@ public:
     int config(int type);
     int setMediaParam(pMediaParam mediaParam);
     std::string getName();
+    pMediaInfo getMediaInfo();
 
 private:
     std::string m_name;
+    MediaInfo mediaInfo;
 };
 
 

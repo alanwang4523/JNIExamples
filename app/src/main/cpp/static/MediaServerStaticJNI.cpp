@@ -142,6 +142,20 @@ JNIEXPORT jstring JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_
 
 /*
  * Class:     com_alan_jniexamples_jnistatic_MediaServerStatic
+ * Method:    nativeGetMediaInfo
+ * Signature: (J)Lcom/alan/jniexamples/common/MediaInfo;
+ */
+JNIEXPORT jobject JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_nativeGetMediaInfo
+        (JNIEnv *env, jobject ojb, jlong instanceId) {
+    MediaServer * mediaServer = (MediaServer *)instanceId;
+    if (!mediaServer) {
+        return nullptr;
+    }
+
+}
+
+/*
+ * Class:     com_alan_jniexamples_jnistatic_MediaServerStatic
  * Method:    nativeRelease
  * Signature: (J)V
  */

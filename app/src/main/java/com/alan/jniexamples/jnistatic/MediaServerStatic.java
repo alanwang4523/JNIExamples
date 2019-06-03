@@ -19,6 +19,7 @@ import android.util.Log;
 
 import com.alan.jniexamples.common.MediaInfo;
 import com.alan.jniexamples.common.MediaParam;
+import com.alan.jniexamples.common.MediaServerCallback;
 
 /**
  * Author: AlanWang4523.
@@ -52,6 +53,10 @@ public class MediaServerStatic {
         }
     }
 
+    public void setMediaServerCallback(MediaServerCallback callback) {
+        nativeSetCallback(mNativeContext, callback);
+    }
+
     public String getName() {
         return nativeGetName(mNativeContext);
     }
@@ -71,6 +76,8 @@ public class MediaServerStatic {
     private native final void nativeConfig(long instanceId, int type);
 
     private native final int nativeSetMediaParam(long instanceId, MediaParam mediaParam);
+
+    private native final void nativeSetCallback(long instanceId, MediaServerCallback callback);
 
     private native final String nativeGetName(long instanceId);
 

@@ -142,6 +142,20 @@ exit:
 
 /*
  * Class:     com_alan_jniexamples_jnistatic_MediaServerStatic
+ * Method:    nativeSetCallback
+ * Signature: (JLcom/alan/jniexamples/common/MediaServerCallback;)V
+ */
+JNIEXPORT void JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_nativeSetCallback
+        (JNIEnv *env, jobject obj, jlong instanceId, jobject jCallback) {
+    MediaServer * mediaServer = (MediaServer *)instanceId;
+    if (!mediaServer) {
+        return;
+    }
+
+}
+
+/*
+ * Class:     com_alan_jniexamples_jnistatic_MediaServerStatic
  * Method:    nativeGetName
  * Signature: (J)Ljava/lang/String;
  */

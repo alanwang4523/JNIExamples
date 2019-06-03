@@ -48,6 +48,14 @@ JNIEXPORT jint JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_nat
 
 /*
  * Class:     com_alan_jniexamples_jnistatic_MediaServerStatic
+ * Method:    nativeSetCallback
+ * Signature: (JLcom/alan/jniexamples/common/MediaServerCallback;)V
+ */
+JNIEXPORT void JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_nativeSetCallback
+        (JNIEnv *, jobject, jlong, jobject);
+
+/*
+ * Class:     com_alan_jniexamples_jnistatic_MediaServerStatic
  * Method:    nativeGetName
  * Signature: (J)Ljava/lang/String;
  */

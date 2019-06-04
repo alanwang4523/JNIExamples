@@ -24,6 +24,7 @@
 
 MediaServer::MediaServer(const char *name) {
     m_name = name;
+    memset(&callbackContext, 0, sizeof(CallbackContext));
     LOGD("MediaServer", "New a MediaServer, name is %s\n", name);
 }
 
@@ -54,4 +55,52 @@ std::string MediaServer::getName() {
 pMediaInfo MediaServer::getMediaInfo()
 {
     return &mediaInfo;
+}
+
+int MediaServer::callbackGetImageTexture(std::string path)
+{
+    int textureId = -1;
+    if (callbackContext.jvm != NULL) {
+        JNIEnv *env;
+        jint res = callbackContext.jvm->GetEnv((void **) &env, NULL);
+        LOGE("MediaServer", "callbackGetImageTexture()-->jvm->GetEnv-->>res = %d", res);
+        if (JNI_OK == res) {
+            textureId = env->CallIntMethod(callbackContext.jniCallbackObj,
+                    callbackContext.jmidGetImageTexture, env->NewStringUTF(path.c_str()));
+        } else {
+            res = callbackContext.jvm->AttachCurrentThread(&env, NULL);
+            LOGE("MediaServer", "callbackGetImageTexture()jvm->AttachCurrentThread-->>res = %d", res);
+            if (JNI_OK == res) {
+                textureId = env->CallIntMethod(callbackContext.jniCallbackObj,
+                        callbackContext.jmidGetImageTexture, env->NewStringUTF(path.c_str()));
+                callbackContext.jvm->DetachCurrentThread();
+            } else {
+                LOGE("MediaServer", "callbackGetImageTexture failed");
+            }
+        }
+    }
+
+    return textureId;
+}
+
+void MediaServer::callbackOnError(int errorCode)
+{
+    if (callbackContext.jvm != NULL) {
+        JNIEnv *env;
+        jint res = callbackContext.jvm->GetEnv((void **) &env, NULL);
+        LOGE("MediaServer", "callbackOnError()-->jvm->GetEnv-->>res = %d", res);
+        if (JNI_OK == res) {
+//            env->CallIntMethod(callbackContext.jniCallbackObj, callbackContext.jmidOnError, env->NewStringUTF(paramString.c_str()));
+            env->CallVoidMethod(callbackContext.jniCallbackObj, callbackContext.jmidOnError, errorCode);
+        } else {
+            res = callbackContext.jvm->AttachCurrentThread(&env, NULL);
+            LOGE("MediaServer", "callbackOnError()jvm->AttachCurrentThread-->>res = %d", res);
+            if (JNI_OK == res) {
+                env->CallVoidMethod(callbackContext.jniCallbackObj, callbackContext.jmidOnError, errorCode);
+                callbackContext.jvm->DetachCurrentThread();
+            } else {
+                LOGE("MediaServer", "callbackOnError failed");
+            }
+        }
+    }
 }

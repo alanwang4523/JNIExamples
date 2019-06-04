@@ -48,6 +48,10 @@ public:
     pCallbackContext getCallbackContext() { return &callbackContext; };
 
 private:
+    int callbackGetImageTexture(std::string path);
+    void callbackOnError(int errorCode);
+
+private:
     std::string m_name;
     MediaInfo mediaInfo;
     CallbackContext callbackContext;

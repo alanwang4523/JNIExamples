@@ -19,6 +19,7 @@
  * Mail: alanwang4523@gmail.com
  */
 
+#include <memory.h>
 #include "MediaServerStaticJNI.h"
 #include "MediaServer.h"
 
@@ -152,6 +153,12 @@ JNIEXPORT void JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_nat
         return;
     }
 
+    memset(mediaServer->getCallbackContext(), 0, sizeof(CallbackContext));
+    env->GetJavaVM(&mediaServer->getCallbackContext()->jvm);
+    mediaServer->getCallbackContext()->jniCallbackObj = env->NewGlobalRef(jCallback);
+    jclass cbkClass = env->GetObjectClass(jCallback);
+    mediaServer->getCallbackContext()->jmidGetImageTexture = env->GetMethodID(cbkClass, "getImageTexture", "(Ljava/lang/String;)I");
+    mediaServer->getCallbackContext()->jmidOnError = env->GetMethodID(cbkClass, "onError", "(I)V");
 }
 
 /*
@@ -212,6 +219,11 @@ JNIEXPORT void JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_nat
 (JNIEnv *env, jobject obj, jlong instanceId) {
     MediaServer * mediaServer = (MediaServer *)instanceId;
     if (mediaServer) {
+        if (mediaServer->getCallbackContext()->jvm != NULL
+            && mediaServer->getCallbackContext()->jniCallbackObj != NULL) {
+            env->DeleteGlobalRef(mediaServer->getCallbackContext()->jniCallbackObj);
+        }
+
         delete mediaServer;
     }
 }

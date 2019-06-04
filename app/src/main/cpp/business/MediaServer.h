@@ -23,7 +23,17 @@
 #define JNIEXAMPLES_MEDIASERVER_H
 
 #include <string>
+#include <jni.h>
 #include "Common.h"
+
+
+
+typedef struct process_callback {
+    JavaVM          *jvm;
+    jobject         jniCallbackObj;
+    jmethodID       jmidGetImageTexture;
+    jmethodID       jmidOnError;
+} CallbackContext, *pCallbackContext;
 
 class MediaServer {
 public:
@@ -35,10 +45,12 @@ public:
     int setMediaParam(pMediaParam mediaParam);
     std::string getName();
     pMediaInfo getMediaInfo();
+    pCallbackContext getCallbackContext() { return &callbackContext; };
 
 private:
     std::string m_name;
     MediaInfo mediaInfo;
+    CallbackContext callbackContext;
 };
 
 

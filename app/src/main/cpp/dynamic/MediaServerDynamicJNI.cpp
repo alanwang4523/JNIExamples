@@ -149,14 +149,14 @@ static jstring MediaServer_native_getName(JNIEnv *env, jobject obj) {
         const char *c_name = mediaServer->getName().c_str();
         return env->NewStringUTF(c_name);
     } else {
-        return nullptr;
+        return NULL;
     }
 }
 
 static jobject MediaServer_native_getMediaInfo(JNIEnv *env, jobject obj) {
     MediaServer * mediaServer = (MediaServer *)env->GetLongField(obj, gFields.context);
     if (!mediaServer) {
-        return nullptr;
+        return NULL;
     }
 
     // 找到要创建的 Java 类

@@ -185,7 +185,7 @@ JNIEXPORT jobject JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_
         (JNIEnv *env, jobject ojb, jlong instanceId) {
     MediaServer * mediaServer = (MediaServer *)instanceId;
     if (!mediaServer) {
-        return nullptr;
+        return NULL;
     }
 
     // 找到要创建的 Java 类

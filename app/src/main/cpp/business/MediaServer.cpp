@@ -19,6 +19,7 @@
  * Mail: alanwang4523@gmail.com
  */
 
+#include <cstring>
 #include "MediaServer.h"
 #include "common/Log.h"
 
@@ -45,6 +46,13 @@ int MediaServer::setMediaParam(pMediaParam mediaParam) {
     mediaInfo.sample_rate = 48000;
     mediaInfo.chanel_count = 2;
     mediaInfo.duration = 120 * 1000L;
+
+    // 底层携带canshu向上层回调，
+    int textureID = callbackGetImageTexture("/sdcard/Alan/test_pic.png");
+    LOGD("MediaServer", "config()-->>instance = %p, textureID get from java : %d\n", this, textureID);
+
+    callbackOnError(-10001);
+
     return SUCCESS;
 }
 
@@ -62,7 +70,7 @@ int MediaServer::callbackGetImageTexture(std::string path)
     int textureId = -1;
     if (callbackContext.jvm != NULL) {
         JNIEnv *env;
-        jint res = callbackContext.jvm->GetEnv((void **) &env, NULL);
+        jint res = callbackContext.jvm->GetEnv((void **) &env, JNI_VERSION_1_4);
         LOGE("MediaServer", "callbackGetImageTexture()-->jvm->GetEnv-->>res = %d", res);
         if (JNI_OK == res) {
             textureId = env->CallIntMethod(callbackContext.jniCallbackObj,
@@ -87,10 +95,9 @@ void MediaServer::callbackOnError(int errorCode)
 {
     if (callbackContext.jvm != NULL) {
         JNIEnv *env;
-        jint res = callbackContext.jvm->GetEnv((void **) &env, NULL);
+        jint res = callbackContext.jvm->GetEnv((void **) &env, JNI_VERSION_1_4);
         LOGE("MediaServer", "callbackOnError()-->jvm->GetEnv-->>res = %d", res);
         if (JNI_OK == res) {
-//            env->CallIntMethod(callbackContext.jniCallbackObj, callbackContext.jmidOnError, env->NewStringUTF(paramString.c_str()));
             env->CallVoidMethod(callbackContext.jniCallbackObj, callbackContext.jmidOnError, errorCode);
         } else {
             res = callbackContext.jvm->AttachCurrentThread(&env, NULL);

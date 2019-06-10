@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.alan.jniexamples.common.MediaInfo;
 import com.alan.jniexamples.common.MediaParam;
+import com.alan.jniexamples.common.MediaServerCallback;
 import com.alan.jniexamples.dynamic.MediaServerDynamic;
 import com.alan.jniexamples.dynamic.NativeDynamic;
 import com.alan.jniexamples.jnistatic.MediaServerStatic;
@@ -73,6 +74,19 @@ public class MainActivity extends AppCompatActivity {
     private void testMediaServerStatic() {
         Log.e(TAG, "/////////////////// testMediaServerStatic ///////////////////");
         MediaServerStatic mediaServerStatic_01 = new MediaServerStatic("MSS_001");
+        mediaServerStatic_01.setMediaServerCallback(new MediaServerCallback() {
+            @Override
+            public int getImageTexture(String path) {
+                Log.d(TAG, "mediaServerStatic_01 getImageTexture() from native--->>path = " + path);
+                int testTextureId = 3;
+                return testTextureId;
+            }
+
+            @Override
+            public void onError(int errorCode) {
+                Log.d(TAG, "mediaServerStatic_01 onError() from native--->>errorCode = " + errorCode);
+            }
+        });
         mediaServerStatic_01.config(3);
 
         MediaParam mediaParam = MediaParam.build()

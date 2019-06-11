@@ -20,6 +20,7 @@
  */
 
 #include <jni.h>
+#include <cstring>
 #include "common/JNIHelper.h"
 #include "common/Log.h"
 #include "business/MediaServer.h"
@@ -143,6 +144,21 @@ exit:
     return errCode;
 }
 
+static void MediaServer_native_setCallback(JNIEnv *env, jobject obj, jobject jCallback) {
+    // 通过上层实例的成员变量获取对应的底层实例
+    MediaServer *mediaServer = (MediaServer *) env->GetLongField(obj, gFields.context);
+    if (!mediaServer) {
+        return;
+    }
+
+    memset(mediaServer->getCallbackContext(), 0, sizeof(CallbackContext));
+    env->GetJavaVM(&mediaServer->getCallbackContext()->jvm);
+    mediaServer->getCallbackContext()->jniCallbackObj = env->NewGlobalRef(jCallback);
+    jclass cbkClass = env->GetObjectClass(jCallback);
+    mediaServer->getCallbackContext()->jmidGetImageTexture = env->GetMethodID(cbkClass, "getImageTexture", "(Ljava/lang/String;)I");
+    mediaServer->getCallbackContext()->jmidOnError = env->GetMethodID(cbkClass, "onError", "(I)V");
+}
+
 static jstring MediaServer_native_getName(JNIEnv *env, jobject obj) {
     MediaServer * mediaServer = (MediaServer *)env->GetLongField(obj, gFields.context);
     if (mediaServer) {
@@ -195,6 +211,7 @@ static JNINativeMethod gJni_Methods[] = {
         {"native_create", "(Ljava/lang/String;)V", (void*)MediaServer_native_create},
         {"native_config", "(I)V", (void*)MediaServer_native_config},
         {"native_setMediaParam", "(Lcom/alan/jniexamples/common/MediaParam;)I", (void*)MediaServer_native_setMediaParam},
+        {"native_setCallback", "(Lcom/alan/jniexamples/common/MediaServerCallback;)V", (void*)MediaServer_native_setCallback},
         {"native_getName", "()Ljava/lang/String;", (void*)MediaServer_native_getName},
         {"native_getMediaInfo", "()Lcom/alan/jniexamples/common/MediaInfo;", (void*)MediaServer_native_getMediaInfo},
         {"native_release", "()V", (void*)MediaServer_native_release},

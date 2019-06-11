@@ -43,6 +43,19 @@ public class MainActivity extends AppCompatActivity {
         Log.e(TAG, "/////////////////// testMediaServerDynamic ///////////////////");
         MediaServerDynamic mediaServerDynamic_01 = new MediaServerDynamic("MSD_001");
         mediaServerDynamic_01.config(1);
+        mediaServerDynamic_01.setMediaServerCallback(new MediaServerCallback() {
+            @Override
+            public int getImageTexture(String path) {
+                Log.d(TAG, "mediaServerDynamic_01 getImageTexture() from native--->>path = " + path);
+                int testTextureId = 2;
+                return testTextureId;
+            }
+
+            @Override
+            public void onError(int errorCode) {
+                Log.d(TAG, "mediaServerDynamic_01 onError() from native--->>errorCode = " + errorCode);
+            }
+        });
 
         MediaParam mediaParam = MediaParam.build()
                 .setPath("/sdcard/Alan/audio/dynamic.m4a")

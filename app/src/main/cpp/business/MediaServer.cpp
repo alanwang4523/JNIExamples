@@ -71,13 +71,13 @@ int MediaServer::callbackGetImageTexture(std::string path)
     if (callbackContext.jvm != NULL) {
         JNIEnv *env;
         jint res = callbackContext.jvm->GetEnv((void **) &env, JNI_VERSION_1_4);
-        LOGE("MediaServer", "callbackGetImageTexture()-->jvm->GetEnv-->>res = %d", res);
+        LOGD("MediaServer", "callbackGetImageTexture()-->jvm->GetEnv-->>res = %d", res);
         if (JNI_OK == res) {
             textureId = env->CallIntMethod(callbackContext.jniCallbackObj,
                     callbackContext.jmidGetImageTexture, env->NewStringUTF(path.c_str()));
         } else {
             res = callbackContext.jvm->AttachCurrentThread(&env, NULL);
-            LOGE("MediaServer", "callbackGetImageTexture()jvm->AttachCurrentThread-->>res = %d", res);
+            LOGD("MediaServer", "callbackGetImageTexture()jvm->AttachCurrentThread-->>res = %d", res);
             if (JNI_OK == res) {
                 textureId = env->CallIntMethod(callbackContext.jniCallbackObj,
                         callbackContext.jmidGetImageTexture, env->NewStringUTF(path.c_str()));
@@ -96,12 +96,12 @@ void MediaServer::callbackOnError(int errorCode)
     if (callbackContext.jvm != NULL) {
         JNIEnv *env;
         jint res = callbackContext.jvm->GetEnv((void **) &env, JNI_VERSION_1_4);
-        LOGE("MediaServer", "callbackOnError()-->jvm->GetEnv-->>res = %d", res);
+        LOGD("MediaServer", "callbackOnError()-->jvm->GetEnv-->>res = %d", res);
         if (JNI_OK == res) {
             env->CallVoidMethod(callbackContext.jniCallbackObj, callbackContext.jmidOnError, errorCode);
         } else {
             res = callbackContext.jvm->AttachCurrentThread(&env, NULL);
-            LOGE("MediaServer", "callbackOnError()jvm->AttachCurrentThread-->>res = %d", res);
+            LOGD("MediaServer", "callbackOnError()jvm->AttachCurrentThread-->>res = %d", res);
             if (JNI_OK == res) {
                 env->CallVoidMethod(callbackContext.jniCallbackObj, callbackContext.jmidOnError, errorCode);
                 callbackContext.jvm->DetachCurrentThread();

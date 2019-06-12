@@ -1,12 +1,62 @@
+
+
 # JNIExamples
+
 Examples for JNI (Java Native Interface)
 
 
 
 ### include:
 
-- **Static registration native methods** 
 
+
+#### Dynamic registration native methods
+
+```java
+    private static native final void native_init();
+
+    static {
+        System.loadLibrary("jni_example");
+        native_init();
+    }
+    // 该成员变量名不要改名，与底层保持一致，用于关联底层实例与 java 实例
+    private long mNativeContext;
+
+    private native final void native_create(String name);
+
+    private native final void native_config(int type);
+
+    private native final int native_setMediaParam(MediaParam mediaParam);
+
+    private native final void native_setCallback(MediaServerCallback callback);
+
+    private native final String native_getName();
+
+    private native final MediaInfo native_getMediaInfo();
+
+    private native final void native_release();
+```
+
+```c
+static JNINativeMethod gJni_Methods[] = {
+        {"native_init", "()V", (void*)MediaServer_native_init},
+        {"native_create", "(Ljava/lang/String;)V", (void*)MediaServer_native_create},
+        {"native_config", "(I)V", (void*)MediaServer_native_config},
+        {"native_setMediaParam", "(Lcom/alan/jniexamples/common/MediaParam;)I", (void*)MediaServer_native_setMediaParam},
+        {"native_setCallback", "(Lcom/alan/jniexamples/common/MediaServerCallback;)V", (void*)MediaServer_native_setCallback},
+        {"native_getName", "()Ljava/lang/String;", (void*)MediaServer_native_getName},
+        {"native_getMediaInfo", "()Lcom/alan/jniexamples/common/MediaInfo;", (void*)MediaServer_native_getMediaInfo},
+        {"native_release", "()V", (void*)MediaServer_native_release},
+};
+
+int register_MediaServerDynamic(JNIEnv* env) {
+    return jniRegisterNativeMethods(env, className, gJni_Methods, NELEM(gJni_Methods));
+}
+```
+
+
+
+####Static registration native methods
 
 ```java
     private native final long nativeCreate(String name);
@@ -84,51 +134,171 @@ JNIEXPORT void JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_nat
 
 
 
-- **Dynamic registration native methods**
+#### Transfer object to native
 
-```java
-    private static native final void native_init();
-
-    static {
-        System.loadLibrary("jni_example");
-        native_init();
-    }
-    // 该成员变量名不要改名，与底层保持一致，用于关联底层实例与 java 实例
-    private long mNativeContext;
-
-    private native final void native_create(String name);
-
-    private native final void native_config(int type);
-
-    private native final int native_setMediaParam(MediaParam mediaParam);
-
-    private native final void native_setCallback(MediaServerCallback callback);
-
-    private native final String native_getName();
-
-    private native final MediaInfo native_getMediaInfo();
-
-    private native final void native_release();
-```
+**上层层给底层传递 Java 对象**
 
 ```c
-static JNINativeMethod gJni_Methods[] = {
-        {"native_init", "()V", (void*)MediaServer_native_init},
-        {"native_create", "(Ljava/lang/String;)V", (void*)MediaServer_native_create},
-        {"native_config", "(I)V", (void*)MediaServer_native_config},
-        {"native_setMediaParam", "(Lcom/alan/jniexamples/common/MediaParam;)I", (void*)MediaServer_native_setMediaParam},
-        {"native_setCallback", "(Lcom/alan/jniexamples/common/MediaServerCallback;)V", (void*)MediaServer_native_setCallback},
-        {"native_getName", "()Ljava/lang/String;", (void*)MediaServer_native_getName},
-        {"native_getMediaInfo", "()Lcom/alan/jniexamples/common/MediaInfo;", (void*)MediaServer_native_getMediaInfo},
-        {"native_release", "()V", (void*)MediaServer_native_release},
-};
+/*
+ * Class:     com_alan_jniexamples_jnistatic_MediaServerStatic
+ * Method:    nativeSetMediaParam
+ * Signature: (JLcom/alan/jniexamples/common/MediaParam;)I
+ */
+JNIEXPORT jint JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_nativeSetMediaParam
+        (JNIEnv *env, jobject jobj, jlong instanceId, jobject jniParamObj) {
 
-int register_MediaServerDynamic(JNIEnv* env) {
-    return jniRegisterNativeMethods(env, className, gJni_Methods, NELEM(gJni_Methods));
+    MediaServer * mediaServer = (MediaServer *)instanceId;
+    if (!mediaServer) {
+        return ERROR_PARAM;
+    }
+
+    int errCode = SUCCESS;
+
+    jclass jclsParamClass = NULL;
+    jmethodID jmid = NULL;
+    jstring jsFilePath = NULL;
+
+    MediaParam mediaParam;
+    mediaParam.path = NULL;
+
+    if ((NULL == env) || (jniParamObj == NULL)) {
+        errCode = ERROR_PARAM;
+        goto exit;
+    }
+
+    jclsParamClass = env->GetObjectClass(jniParamObj);
+    if (NULL == jclsParamClass) {
+        errCode = ERROR_PARAM;
+        goto exit;
+    }
+
+    //获取文件路径
+    jmid = env->GetMethodID(jclsParamClass, "getPath", "()Ljava/lang/String;");
+    if (NULL == jmid) {
+        errCode = ERROR_PARAM;
+        goto exit;
+    }
+    jsFilePath = (jstring) env->CallObjectMethod(jniParamObj, jmid);
+    if (NULL != jsFilePath) {
+        mediaParam.path = env->GetStringUTFChars(jsFilePath, NULL);
+    }
+
+    jmid = env->GetMethodID(jclsParamClass, "getStartTime", "()J");
+    if (NULL == jmid) {
+        errCode = ERROR_PARAM;
+        goto exit;
+    }
+    mediaParam.start_time = env->CallLongMethod(jniParamObj, jmid);
+
+    jmid = env->GetMethodID(jclsParamClass, "getEndTime", "()J");
+    if (NULL == jmid) {
+        errCode = ERROR_PARAM;
+        goto exit;
+    }
+    mediaParam.end_time = env->CallLongMethod(jniParamObj, jmid);
+
+    jmid = env->GetMethodID(jclsParamClass, "isEnableLoop", "()Z");
+    if (NULL == jmid) {
+        errCode = ERROR_PARAM;
+        goto exit;
+    }
+    mediaParam.enable_loop = env->CallBooleanMethod(jniParamObj, jmid);
+
+    errCode = mediaServer->setMediaParam(&mediaParam);
+exit:
+    if (jclsParamClass) {
+        env->DeleteLocalRef(jclsParamClass);
+    }
+    //释放文件路径相关的内存
+    if (mediaParam.path) {
+        env->ReleaseStringUTFChars(jsFilePath, mediaParam.path);
+    }
+    if (jsFilePath) {
+        env->DeleteLocalRef(jsFilePath);
+    }
+    return errCode;
 }
 ```
 
-- **Transfer basic type to native**
-- **Transfer object to native**
-- **Set callbck to native**
-- **Native callback java method**
+**底层给上层返回 java 对象**
+
+```c
+/*
+ * Class:     com_alan_jniexamples_jnistatic_MediaServerStatic
+ * Method:    nativeSetCallback
+ * Signature: (JLcom/alan/jniexamples/common/MediaServerCallback;)V
+ */
+JNIEXPORT void JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_nativeSetCallback
+        (JNIEnv *env, jobject obj, jlong instanceId, jobject jCallback) {
+    MediaServer * mediaServer = (MediaServer *)instanceId;
+    if (!mediaServer) {
+        return;
+    }
+
+    memset(mediaServer->getCallbackContext(), 0, sizeof(CallbackContext));
+    env->GetJavaVM(&mediaServer->getCallbackContext()->jvm);
+    mediaServer->getCallbackContext()->jniCallbackObj = env->NewGlobalRef(jCallback);
+    jclass cbkClass = env->GetObjectClass(jCallback);
+    mediaServer->getCallbackContext()->jmidGetImageTexture = env->GetMethodID(cbkClass, "getImageTexture", "(Ljava/lang/String;)I");
+    mediaServer->getCallbackContext()->jmidOnError = env->GetMethodID(cbkClass, "onError", "(I)V");
+}
+```
+
+
+
+#### Set callbck to native
+
+```c
+/*
+ * Class:     com_alan_jniexamples_jnistatic_MediaServerStatic
+ * Method:    nativeSetCallback
+ * Signature: (JLcom/alan/jniexamples/common/MediaServerCallback;)V
+ */
+JNIEXPORT void JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_nativeSetCallback
+        (JNIEnv *env, jobject obj, jlong instanceId, jobject jCallback) {
+    MediaServer * mediaServer = (MediaServer *)instanceId;
+    if (!mediaServer) {
+        return;
+    }
+
+    memset(mediaServer->getCallbackContext(), 0, sizeof(CallbackContext));
+    env->GetJavaVM(&mediaServer->getCallbackContext()->jvm);
+    mediaServer->getCallbackContext()->jniCallbackObj = env->NewGlobalRef(jCallback);
+    jclass cbkClass = env->GetObjectClass(jCallback);
+    mediaServer->getCallbackContext()->jmidGetImageTexture = env->GetMethodID(cbkClass, "getImageTexture", "(Ljava/lang/String;)I");
+    mediaServer->getCallbackContext()->jmidOnError = env->GetMethodID(cbkClass, "onError", "(I)V");
+}
+```
+
+
+
+#### Native callback java method
+
+```c
+int MediaServer::callbackGetImageTexture(std::string path)
+{
+    int textureId = -1;
+    if (callbackContext.jvm != NULL) {
+        JNIEnv *env;
+        jint res = callbackContext.jvm->GetEnv((void **) &env, JNI_VERSION_1_4);
+        LOGD("MediaServer", "callbackGetImageTexture()-->jvm->GetEnv-->>res = %d", res);
+        if (JNI_OK == res) {
+            textureId = env->CallIntMethod(callbackContext.jniCallbackObj,
+                    callbackContext.jmidGetImageTexture, env->NewStringUTF(path.c_str()));
+        } else {
+            res = callbackContext.jvm->AttachCurrentThread(&env, NULL);
+            LOGD("MediaServer", "callbackGetImageTexture()jvm->AttachCurrentThread-->>res = %d", res);
+            if (JNI_OK == res) {
+                textureId = env->CallIntMethod(callbackContext.jniCallbackObj,
+                        callbackContext.jmidGetImageTexture, env->NewStringUTF(path.c_str()));
+                callbackContext.jvm->DetachCurrentThread();
+            } else {
+                LOGE("MediaServer", "callbackGetImageTexture failed");
+            }
+        }
+    }
+
+    return textureId;
+}
+```
+

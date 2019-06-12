@@ -56,7 +56,7 @@ int register_MediaServerDynamic(JNIEnv* env) {
 
 
 
-####Static registration native methods
+#### Static registration native methods
 
 ```java
     private native final long nativeCreate(String name);
@@ -136,7 +136,7 @@ JNIEXPORT void JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_nat
 
 #### Transfer object to native
 
-**上层层给底层传递 Java 对象**
+**Set java object to native**
 
 ```c
 /*
@@ -220,27 +220,41 @@ exit:
 }
 ```
 
-**底层给上层返回 java 对象**
+**Return java object from native to java**
 
 ```c
 /*
  * Class:     com_alan_jniexamples_jnistatic_MediaServerStatic
- * Method:    nativeSetCallback
- * Signature: (JLcom/alan/jniexamples/common/MediaServerCallback;)V
+ * Method:    nativeGetMediaInfo
+ * Signature: (J)Lcom/alan/jniexamples/common/MediaInfo;
  */
-JNIEXPORT void JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_nativeSetCallback
-        (JNIEnv *env, jobject obj, jlong instanceId, jobject jCallback) {
+JNIEXPORT jobject JNICALL Java_com_alan_jniexamples_jnistatic_MediaServerStatic_nativeGetMediaInfo
+        (JNIEnv *env, jobject ojb, jlong instanceId) {
     MediaServer * mediaServer = (MediaServer *)instanceId;
     if (!mediaServer) {
-        return;
+        return NULL;
     }
 
-    memset(mediaServer->getCallbackContext(), 0, sizeof(CallbackContext));
-    env->GetJavaVM(&mediaServer->getCallbackContext()->jvm);
-    mediaServer->getCallbackContext()->jniCallbackObj = env->NewGlobalRef(jCallback);
-    jclass cbkClass = env->GetObjectClass(jCallback);
-    mediaServer->getCallbackContext()->jmidGetImageTexture = env->GetMethodID(cbkClass, "getImageTexture", "(Ljava/lang/String;)I");
-    mediaServer->getCallbackContext()->jmidOnError = env->GetMethodID(cbkClass, "onError", "(I)V");
+    // 找到要创建的 Java 类
+    jclass jclMediaInfo = env->FindClass("com/alan/jniexamples/common/MediaInfo");
+    // 获取 Java 类的构造函数及相关方法
+    jmethodID jmidConstructor = env->GetMethodID(jclMediaInfo, "<init>", "()V");
+    jmethodID jmidSetSampleRate = env->GetMethodID(jclMediaInfo, "setSampleRate", "(I)V");
+    jmethodID jmidSetChanelCount = env->GetMethodID(jclMediaInfo, "setChanelCount", "(I)V");
+    jmethodID jmidSetDuration = env->GetMethodID(jclMediaInfo, "setDuration", "(J)V");
+
+    // 通过构造函数创建 Java 实例
+    jobject jobjMediaInfo = env->NewObject(jclMediaInfo, jmidConstructor);
+
+    // 从 C/C++ 的业务实例获取 Java 层要获取的信息
+    pMediaInfo mediaInfo = mediaServer->getMediaInfo();
+
+    // 通过相应的方法给创建的 Java 实例赋值
+    env->CallVoidMethod(jobjMediaInfo, jmidSetSampleRate, mediaInfo->sample_rate);
+    env->CallVoidMethod(jobjMediaInfo, jmidSetChanelCount, mediaInfo->chanel_count);
+    env->CallVoidMethod(jobjMediaInfo, jmidSetDuration, mediaInfo->duration);
+
+    return jobjMediaInfo;
 }
 ```
 
